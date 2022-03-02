@@ -8,8 +8,8 @@ const prisma = new PrismaClient();
  * @returns {Promise<document>}
  */
 const create = async (data) => {
-    const repository = new Repository(prisma, prisma.User);
-    return repository.create(data);
+  const repository = new Repository(prisma, prisma.User);
+  return repository.create(data);
 };
 
 /**
@@ -19,8 +19,8 @@ const create = async (data) => {
  * @returns {Promise<Query|*>}
  */
 const update = async (whereClause, data) => {
-    const repository = new Repository(prisma, prisma.User);
-    return repository.update({ ...whereClause, id: whereClause.id }, data);
+  const repository = new Repository(prisma, prisma.User);
+  return repository.update({ ...whereClause, id: whereClause.id }, data);
 };
 
 /**
@@ -29,9 +29,9 @@ const update = async (whereClause, data) => {
  * @param projection
  * @returns {Promise<Promise<*>|Query|void|Promise<*|undefined>>}
  */
-const findUnique = async (whereClause, projection = {}) => {
-    const repository = new Repository(prisma, prisma.User);
-    return repository.findUnique({ ...whereClause, id: whereClause.id }, projection);
+const findUnique = async (whereClause, projection = null) => {
+  const repository = new Repository(prisma, prisma.User);
+  return repository.findUnique({ ...whereClause }, projection);
 };
 
 /**
@@ -41,10 +41,57 @@ const findUnique = async (whereClause, projection = {}) => {
  * @returns {Promise<Promise<*>|Query|void|Promise<*|undefined>>}
  */
 const findMany = async (whereClause, projection = {}) => {
-    const repository = new Repository(prisma, prisma.User);
-    return repository.findMany({ ...whereClause}, projection);
+  const repository = new Repository(prisma, prisma.User);
+  return repository.findMany({ ...whereClause }, projection);
 };
 
-module.exports = { create, update, findUnique,findMany };
+/**
+ *
+ * @param whereClause
+ * @param projection
+ * @returns {Promise<Promise<*>|Query|void|Promise<*|undefined>>}
+ */
+ const findManySynchronous = (whereClause, projection = {}) => {
+  const repository = new Repository(prisma, prisma.User);
+  return repository.findMany({ ...whereClause }, projection);
+};
 
+/**
+ *
+ * @param whereClause
+ * @param data
+ * @returns {Promise<Query|*>}
+ */
+const upsert = async (whereClause, update, create) => {
+  const repository = new Repository(prisma, prisma.User);
+  return repository.upsert({ ...whereClause }, update, create);
+};
+/**
+ *
+ * @param whereClause
+ * @param projection
+ * @returns {Promise<Promise<*>|Query|void|Promise<*|undefined>>}
+ */
+const findManyWithRelationship = async (
+  whereClause,
+  projection = {},
+  orderBy = {},
+  select = {}
+) => {
+  const repository = new Repository(prisma, prisma.User);
+  return repository.findManyWithRelationship(
+    { ...whereClause },
+    projection,
+    orderBy
+  );
+};
 
+module.exports = {
+  create,
+  update,
+  findUnique,
+  findMany,
+  upsert,
+  findManyWithRelationship,
+  findManySynchronous
+};
