@@ -1,9 +1,9 @@
 "use strict";
 
 const fastify = require("fastify");
-const cors = require("fastify-cors");
+const cors = require("@fastify/cors");
 const swagger = require("fastify-swagger");
-const autoload = require("fastify-autoload");
+const autoload = require("@fastify/autoload");
 const routes = require("./app/routes/routes");
 const { v4: uuid } = require("uuid");
 const path = require("path");
@@ -37,7 +37,7 @@ const init = async () => {
   });
   app.register(cors);
   app.register(swagger, swagger_configuration());
-  app.register(require("fastify-jwt"), {
+  app.register(require("@fastify/jwt"), {
     secret: process.env.APP_KEY,
   });
   app.register(autoload, {
@@ -45,7 +45,7 @@ const init = async () => {
     ignorePattern: /^(__tests__)/,
   });
   app.register(routes);
-  
+
 
   // if we want to add hooks
   //app.addHook('function_name', function(){});
@@ -61,7 +61,7 @@ const run = (app) =>
       app.log.error(err);
       process.exit(1);
     }
-    global.app=app;
+    global.app = app;
     // global app for fastify
     console.group("fastify-initilization ⚡");
     console.warn("Server is now listening on", address);
